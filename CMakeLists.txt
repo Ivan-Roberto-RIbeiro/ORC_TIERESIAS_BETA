@@ -3,4 +3,8 @@ find_package(Zephyr REQUIRED HINTS $ENV{ZEPHYR_BASE})
 
 project(ORC_TIERESIAS_BETA)
 
+# Avisa o compilador das nossas subpastas
+add_subdirectory(src/services/bluetooth)
+add_subdirectory(src/utils)
+
 target_sources(app PRIVATE src/main.c)

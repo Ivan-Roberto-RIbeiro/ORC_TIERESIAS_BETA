@@ -1,0 +1,66 @@
+/* ======================================================================
+ * orc-tieresias - Roteamento de Hardware (nRF5340 DK)
+ * ====================================================================== */
+
+/* 1. Barramento I2C para o IMU (BMI270) */
+&i2c1 {
+    compatible = "nordic,nrf-twim";
+    status = "okay";
+
+    /* Velocidade de 400kHz (Fast Mode) - ideal para taxa de 2000Hz no futuro */
+    clock-frequency = <I2C_BITRATE_FAST>;
+
+    bmi270: bmi270@68 {
+        compatible = "bosch,bmi270";
+        reg = <0x68>; /* Endereço I2C padrão do BMI270 (pode ser 0x69 se o pino SDO estiver em HIGH) */
+    };
+};
+
+/* 2. Conversores Analógicos (ADC) para os EMGs e Microfones */
+&adc {
+    status = "okay";
+    #address-cells = <1>;
+    #size-cells = <0>;
+
+    /* EMG 1 - Pino Analógico 0 (Fisicamente P0.04 no nRF5340) */
+    channel@0 {
+        reg = <0>;
+        zephyr,gain = "ADC_GAIN_1_4";
+        zephyr,reference = "ADC_REF_VDD_1_4";
+        zephyr,acquisition-time = <ADC_ACQ_TIME_DEFAULT>;
+        zephyr,input-positive = <NRF_SAADC_AIN0>;
+        zephyr,resolution = <12>;
+    };
+
+    /* EMG 2 - Pino Analógico 1 (Fisicamente P0.05 no nRF5340) */
+    channel@1 {
+        reg = <1>;
+        zephyr,gain = "ADC_GAIN_1_4";
+        zephyr,reference = "ADC_REF_VDD_1_4";
+        zephyr,acquisition-time = <ADC_ACQ_TIME_DEFAULT>;
+        zephyr,input-positive = <NRF_SAADC_AIN1>;
+        zephyr,resolution = <12>;
+    };
+
+    /* Microfone 1 - Pino Analógico 2 (Fisicamente P0.06 no nRF5340) */
+    channel@2 {
+        reg = <2>;
+        zephyr,gain = "ADC_GAIN_1_4";
+        zephyr,reference = "ADC_REF_VDD_1_4";
+        zephyr,acquisition-time = <ADC_ACQ_TIME_DEFAULT>;
+        zephyr,input-positive = <NRF_SAADC_AIN2>;
+        zephyr,resolution = <12>;
+    };
+
+    /* Microfone 2 - Pino Analógico 3 (Fisicamente P0.07 no nRF5340) */
+    channel@3 {
+        reg = <3>;
+        zephyr,gain = "ADC_GAIN_1_4";
+        zephyr,reference = "ADC_REF_VDD_1_4";
+        zephyr,acquisition-time = <ADC_ACQ_TIME_DEFAULT>;
+        zephyr,input-positive = <NRF_SAADC_AIN3>;
+        zephyr,resolution = <12>;
+    };
+};/* For more help, browse the devicetree documentation at https://docs.zephyrproject.org/latest/build/dts/index.html
+ * You can also visit the nRF DeviceTree extension documentation at https://docs.nordicsemi.com/bundle/nrf-connect-vscode/page/guides/ncs_configure_app.html#devicetree-support-in-the-extension
+ */

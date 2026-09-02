@@ -1,0 +1,1 @@
+zephyr_library_sources(ble_telemetry.c)

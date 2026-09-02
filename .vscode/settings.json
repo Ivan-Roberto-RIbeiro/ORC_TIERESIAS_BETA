@@ -1,5 +1,3 @@
 {
-    "nrf-connect.applications": [
-        "${workspaceFolder}"
-    ]
+    "nrf-connect.applications": []
 }
