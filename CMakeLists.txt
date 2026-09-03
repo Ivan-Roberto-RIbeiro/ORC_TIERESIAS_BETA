@@ -6,5 +6,7 @@ project(ORC_TIERESIAS_BETA)
 # Avisa o compilador das nossas subpastas
 add_subdirectory(src/services/bluetooth)
 add_subdirectory(src/utils)
+add_subdirectory(src/services/imu_sensor)
 
 target_sources(app PRIVATE src/main.c)
+
