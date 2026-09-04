@@ -12,8 +12,8 @@ struct imu_data_chan_msg {
 
 /* Estrutura de dados que sai do head_tracking.c e vai para o BLE */
 struct orientation_chan_msg {
-    int16_t pitch_scaled;
-    int16_t roll_scaled;
+    float pitch;
+    float roll;
 };
 
 ZBUS_CHAN_DECLARE(imu_data_chan);

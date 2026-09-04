@@ -138,13 +138,24 @@ static void head_tracking_thread(void)
             float pitch_deg = pitch_rad * (180.0f / 3.14159265359f);
             float roll_deg = roll_rad * (180.0f / 3.14159265359f);
 
-            /* Empacota para envio no Zbus (x100 para preservar 2 casas decimais) */
-            struct orientation_chan_msg msg = {
-                .pitch_scaled = (int16_t)(pitch_deg * 100.0f),
-                .roll_scaled  = (int16_t)(roll_deg * 100.0f)
-            };
+            /* === NOVO: IMPRIMINDO NO TERMINAL === */
+            static int log_counter = 0;
+            if (++log_counter % 50 == 0) {
+                LOG_INF("Madgwick -> Pitch: %5.1f | Roll: %5.1f", 
+                        (double)pitch_deg, (double)roll_deg);
+            }
+            /* ==================================== */
 
+            //* 1. Faltou esta linha aqui! Ela cria a variável 'msg' na memória */
+            struct orientation_chan_msg msg;
+            
+            /* 2. Agora sim podemos guardar os dados dentro dela */
+            msg.pitch = pitch_deg;
+            msg.roll  = roll_deg;
+
+            /* 3. E enviamos ela pelo Zbus */
             ret = zbus_chan_pub(&orientation_chan, &msg, K_NO_WAIT);
+            
             if (ret != 0) {
                 LOG_ERR("Failed to publish orientation: %d", ret);
             }

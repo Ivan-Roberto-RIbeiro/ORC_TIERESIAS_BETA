@@ -10,7 +10,7 @@ int main(void)
     LOG_INF("========================================");
 
     int contador = 0;
-
+    
     while (1) {
         LOG_INF("Main viva! Ping: %d", contador);
         k_msleep(1000); /* Pisca a cada 1 segundo */
