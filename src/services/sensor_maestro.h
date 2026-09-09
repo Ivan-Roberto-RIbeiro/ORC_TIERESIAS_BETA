@@ -4,7 +4,7 @@
 #include <stdint.h>
 #include <zephyr/zbus/zbus.h>
 
-/* Frame individual (16 bytes) */
+/* A struct do Frame (16 bytes) */
 struct __attribute__((packed)) orc_frame_t {
     uint16_t timestamp;
     uint16_t emg1;
@@ -16,12 +16,15 @@ struct __attribute__((packed)) orc_frame_t {
     int16_t  imu_z;
 };
 
-/* O caminhão de dados (15 frames = 240 bytes) */
+/* A struct do Caminhão (240 bytes) */
 struct __attribute__((packed)) orc_batch_msg_t {
     struct orc_frame_t frames[15];
 };
 
-/* Declaramos o canal Zbus mestre para o resto do sistema enxergar */
+/* O SEGREDO DO ZBUS: DECLARE (Não DEFINE)
+ * Isso avisa ao compilador que o canal "sensor_batch_chan" 
+ * foi instanciado em algum .c (no caso, dentro do maestro.c)
+ */
 ZBUS_CHAN_DECLARE(sensor_batch_chan);
 
 #endif /* SENSOR_MAESTRO_H */

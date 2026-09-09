@@ -42,6 +42,9 @@ ZBUS_SUBSCRIBER_DEFINE(sensor_batch_sub, 4); /* Escuta o "caminhão" de dados ch
 ZBUS_CHAN_DEFINE(bt_state_chan, struct bt_state_chan_msg, NULL, NULL, ZBUS_OBSERVERS_EMPTY, ZBUS_MSG_INIT(.state = BT_STATE_OFF));
 ZBUS_CHAN_DEFINE(bt_cmd_chan, struct bt_cmd_chan_msg, NULL, NULL, ZBUS_OBSERVERS(bt_cmd_sub), ZBUS_MSG_INIT(.cmd = BT_CMD_INIT));
 ZBUS_CHAN_DEFINE(led_chan, struct led_chan_msg_t, NULL, NULL, ZBUS_OBSERVERS_EMPTY, ZBUS_MSG_INIT(.led = LED_3, .cmd = TURN_OFF));
+/* Canal Mestre declarado externamente (definido no sensor_maestro.c) */
+ZBUS_CHAN_DECLARE(sensor_batch_chan);
+
 
 /* Canal Mestre de Dados: Por onde a Thread do Timer envia os 240 bytes para o Bluetooth */
 //ZBUS_CHAN_DEFINE(sensor_batch_chan, struct orc_batch_msg_t, NULL, NULL, ZBUS_OBSERVERS(sensor_batch_sub), ZBUS_MSG_INIT(0));
@@ -172,14 +175,12 @@ int ble_init(void (*connected_cb)(void), void (*disconnected_cb)(void)) {
 static void ble_tx_thread(void *arg1, void *arg2, void *arg3)
 {
     const struct zbus_channel *chan;
-    struct orc_batch_msg_t batch_data;
+    // Substitui a struct por um buffer plano do exato tamanho do lote (240 bytes)
+    uint8_t batch_data[15 * 16]; 
 
     LOG_INF("Iniciando a Thread de Transmissao BLE...");
     
-    /* ADICIONE ESTA LINHA: Conecta o rádio ao canal do Maestro */
     zbus_chan_add_obs(&sensor_batch_chan, &sensor_batch_sub, K_MSEC(200));
-    
-    /* Liga o Bluetooth na inicialização do módulo */
     ble_init(NULL, NULL);
 
     while (1) {

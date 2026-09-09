@@ -5,16 +5,16 @@ LOG_MODULE_REGISTER(main_app, LOG_LEVEL_INF);
 
 int main(void)
 {
-    LOG_INF("========================================");
-    LOG_INF("    Iniciando o orc-tieresias...        ");
-    LOG_INF("========================================");
+    LOG_INF("Iniciando o Sistema orc-tieresias...");
 
-    int contador = 0;
+    // O ble_telemetry_init() ou ble_init() já cuida do rádio.
+    // O sensor_maestro inicializa sozinho via K_THREAD_DEFINE.
+
+    LOG_INF("Sistema rodando. Aguardando conexao Python...");
     
     while (1) {
-        LOG_INF("Main viva! Ping: %d", contador);
-        k_msleep(1000); /* Pisca a cada 1 segundo */
+        k_sleep(K_FOREVER);
     }
-
+    
     return 0;
 }
